@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Préstamos INCOA</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <!-- PWA: permite "Agregar a pantalla de inicio" / "Instalar app" en el celular -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#4f46e5" />
+  <link rel="icon" href="/icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Préstamos INCOA" />
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <img src="img/logo-incoa.jpeg" alt="Logo INCOA" class="brand-logo"/>
+      <span>Préstamos INCOA</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" data-page="inicio" data-tooltip="Inicio">
+        <i class="fas fa-house"></i><span>Inicio</span>
+      </a>
+      <a href="#" class="nav-item" data-page="inventario" data-tooltip="Inventario">
+        <i class="fas fa-boxes-stacked"></i><span>Inventario</span>
+      </a>
+      <a href="#" class="nav-item" data-page="prestamos" data-tooltip="Préstamos">
+        <i class="fas fa-right-left"></i><span>Préstamos</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-wrapper">
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="topbar-right">
+        <button class="dark-toggle" id="darkModeBtn" title="Modo oscuro">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- PAGE CONTENT -->
+    <main class="content" id="pageContent">
+
+      <!-- INICIO PAGE -->
+      <section class="page active" id="page-inicio">
+        <h2 class="page-title">Panel General</h2>
+        <div class="stats-grid">
+          <div class="stat-card" data-page="inventario">
+            <div class="stat-info">
+              <span class="stat-number" id="count-articulos">0</span>
+              <span class="stat-label">Artículos Totales</span>
+            </div>
+            <div class="stat-icon"><i class="fas fa-box"></i></div>
+          </div>
+          <div class="stat-card" data-page="inventario">
+            <div class="stat-info">
+              <span class="stat-number" id="count-disponibles">0</span>
+              <span class="stat-label">Disponibles</span>
+            </div>
+            <div class="stat-icon"><i class="fas fa-circle-check"></i></div>
+          </div>
+          <div class="stat-card" data-page="prestamos">
+            <div class="stat-info">
+              <span class="stat-number" id="count-prestados">0</span>
+              <span class="stat-label">Artículos Prestados</span>
+            </div>
+            <div class="stat-icon"><i class="fas fa-hand-holding"></i></div>
+          </div>
+          <div class="stat-card" data-page="prestamos">
+            <div class="stat-info">
+              <span class="stat-number" id="count-prestamos-activos">0</span>
+              <span class="stat-label">Préstamos Activos</span>
+            </div>
+            <div class="stat-icon"><i class="fas fa-clock"></i></div>
+          </div>
+        </div>
+
+        <div class="total-ventas-card">
+          <div>
+            <div class="total-amount" id="resumenDisponibilidad">0%</div>
+            <div class="total-label">Disponibilidad del Inventario</div>
+          </div>
+          <i class="fas fa-chart-pie total-icon"></i>
+        </div>
+      </section>
+
+      <!-- INVENTARIO PAGE -->
+      <section class="page" id="page-inventario">
+        <h2 class="page-title">Inventario de Artículos</h2>
+        <div class="table-toolbar">
+          <input type="text" class="search-input" placeholder="Buscar por nombre o número de serie..." id="searchArticulos"/>
+          <button class="btn-primary" onclick="abrirModalArticulo()"><i class="fas fa-plus"></i> Nuevo Artículo</button>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table" id="tablaArticulos">
+            <thead>
+              <tr><th>#</th><th>Nombre</th><th>Número de Serie</th><th>Estado</th><th>Acciones</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- PRÉSTAMOS PAGE -->
+      <section class="page" id="page-prestamos">
+        <h2 class="page-title">Préstamos</h2>
+        <div class="table-toolbar">
+          <input type="text" class="search-input" placeholder="Buscar por persona, código, sección o artículo..." id="searchPrestamos"/>
+          <button class="btn-primary" onclick="abrirModalPrestamo()"><i class="fas fa-plus"></i> Nuevo Préstamo</button>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table" id="tablaPrestamos">
+            <thead>
+              <tr>
+                <th>#</th><th>Persona</th><th>Código</th><th>Sección</th>
+                <th>Artículo</th><th>Fecha y Hora</th><th>Estado</th><th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Modal Artículo -->
+  <div class="modal-overlay" id="modalArticulo">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modalArticuloTitulo">Nuevo Artículo</h3>
+        <button class="modal-close" onclick="closeModal('modalArticulo')"><i class="fas fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Nombre del artículo</label>
+          <input type="text" id="articuloNombre" placeholder="Ej. Laptop Dell, Balón de fútbol..."/>
+        </div>
+        <div class="form-group">
+          <label>Número de serie (máx. 10 dígitos)</label>
+          <div class="input-with-btn">
+            <input type="text" id="articuloSerie" placeholder="Ej. 12345" maxlength="10" inputmode="numeric"/>
+            <button type="button" class="btn-secondary btn-inline" onclick="generarSerie()"><i class="fas fa-dice"></i></button>
+          </div>
+        </div>
+        <div class="form-group" id="grupoEstadoArticulo">
+          <label>Estado</label>
+          <select id="articuloEstado">
+            <option value="Disponible">Disponible</option>
+            <option value="Prestado">Prestado</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('modalArticulo')">Cancelar</button>
+        <button class="btn-primary" onclick="guardarArticulo()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Préstamo -->
+  <div class="modal-overlay" id="modalPrestamo">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Nuevo Préstamo</h3>
+        <button class="modal-close" onclick="closeModal('modalPrestamo')"><i class="fas fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Artículo a prestar</label>
+          <select id="prestamoArticulo"></select>
+        </div>
+        <div class="form-group">
+          <label>Nombre de la persona</label>
+          <input type="text" id="prestamoPersona" placeholder="Nombre completo"/>
+        </div>
+        <div class="form-group">
+          <label>Código</label>
+          <input type="text" id="prestamoCodigo" placeholder="Ej. 2026-0145"/>
+        </div>
+        <div class="form-group">
+          <label>Sección (Grado)</label>
+          <input type="text" id="prestamoSeccion" placeholder="Ej. 9° Grado - Sección A"/>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('modalPrestamo')">Cancelar</button>
+        <button class="btn-primary" onclick="agregarPrestamo()">Registrar Préstamo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Confirmación -->
+  <div class="modal-overlay" id="modalConfirmar">
+    <div class="modal modal-confirm">
+      <div class="modal-confirm-icon">
+        <i class="fas fa-triangle-exclamation"></i>
+      </div>
+      <h3 class="modal-confirm-title" id="confirmTitulo">¿Confirmar acción?</h3>
+      <p class="modal-confirm-msg" id="confirmMsg">Esta acción no se puede deshacer.</p>
+      <div class="modal-footer" style="justify-content:center; gap:16px;">
+        <button class="btn-secondary" id="confirmCancelar">Cancelar</button>
+        <button class="btn-danger" id="confirmAceptar">Sí, continuar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "name": "sistema-inventario-prestamos-incoa",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Sistema de Inventario y Prestamos - INCOA",
+  "dependencies": {
+    "@neondatabase/serverless": "^0.10.4"
+  }
+}
