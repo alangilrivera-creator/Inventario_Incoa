@@ -228,7 +228,7 @@ async function guardarArticulo() {
   const serie  = getVal('articuloSerie');
 
   if (!nombre) { showToast('Por favor ingresa el nombre del artículo.', true); return; }
-  if (!/^\d{1,10}$/.test(serie)) { showToast('El número de serie debe ser numérico y de máximo 10 dígitos.', true); return; }
+  if (!/^\d+$/.test(serie)) { showToast('El número de serie debe contener solo números.', true); return; }
 
   const esEdicion = editandoArticuloId !== null;
   const btnGuardar = document.querySelector('#modalArticulo .btn-primary');
