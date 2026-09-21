@@ -59,6 +59,10 @@ document.getElementById('confirmCancelar').addEventListener('click', () => {
 // ===========================
 // SIDEBAR / TOPBAR
 // ===========================
+document.getElementById('sidebarBackdrop').addEventListener('click', () => {
+  document.getElementById('sidebar').classList.remove('open');
+});
+
 document.getElementById('menuToggle').addEventListener('click', () => {
   const sidebar     = document.getElementById('sidebar');
   const mainWrapper = document.querySelector('.main-wrapper');
@@ -152,9 +156,9 @@ function formatFechaHora(isoString) {
 }
 
 function generarSerie() {
-  let serie = '';
-  for (let i = 0; i < 10; i++) serie += Math.floor(Math.random() * 10);
-  document.getElementById('articuloSerie').value = serie;
+  const parte1 = Math.floor(10000 + Math.random() * 90000);      // 5 dígitos
+  const parte2 = Math.floor(1000 + Math.random() * 9000);        // 4 dígitos
+  document.getElementById('articuloSerie').value = `${parte1}-${parte2}`;
 }
 
 async function leerError(res, defaultMsg) {
@@ -228,7 +232,7 @@ async function guardarArticulo() {
   const serie  = getVal('articuloSerie');
 
   if (!nombre) { showToast('Por favor ingresa el nombre del artículo.', true); return; }
-  if (!/^\d{1,10}$/.test(serie)) { showToast('El número de serie debe ser numérico y de máximo 10 dígitos.', true); return; }
+  if (!/^\d+(-\d+)*$/.test(serie)) { showToast('El número de serie debe contener solo números y guiones (ej. 11329-0001).', true); return; }
 
   const esEdicion = editandoArticuloId !== null;
   const btnGuardar = document.querySelector('#modalArticulo .btn-primary');
@@ -298,11 +302,11 @@ function renderArticulos(lista) {
   const rows = data.map((a, i) => {
     const badgeClass = a.estado === 'Disponible' ? 'badge-done' : 'badge-pending';
     return `
-      <td>${i + 1}</td>
-      <td>${escapeHtml(a.nombre)}</td>
-      <td>${a.serie}</td>
-      <td><span class="badge ${badgeClass}">${a.estado}</span></td>
-      <td>
+      <td data-label="#">${i + 1}</td>
+      <td data-label="Nombre">${escapeHtml(a.nombre)}</td>
+      <td data-label="N.° de Serie">${a.serie}</td>
+      <td data-label="Estado"><span class="badge ${badgeClass}">${a.estado}</span></td>
+      <td data-label="Acciones" class="td-actions">
         <button class="btn-action btn-edit" onclick="editarArticulo(${a.id})" title="Editar"><i class="fas fa-pen"></i></button>
         <button class="btn-action btn-delete" onclick="eliminarArticulo(${a.id})" title="Eliminar" ${a.estado === 'Prestado' ? 'disabled' : ''}><i class="fas fa-trash"></i></button>
       </td>
@@ -449,14 +453,14 @@ function renderPrestamos(lista) {
   const rows = data.map((p, i) => {
     const badgeClass = p.estado === 'Devuelto' ? 'badge-done' : 'badge-pending';
     return `
-      <td>${i + 1}</td>
-      <td>${escapeHtml(p.persona)}</td>
-      <td>${escapeHtml(p.codigo)}</td>
-      <td>${escapeHtml(p.seccion)}</td>
-      <td>${escapeHtml(p.articuloNombre)} <span style="color:var(--text-muted); font-size:0.78rem;">(${p.articuloSerie})</span></td>
-      <td>${p.fechaHora}</td>
-      <td><span class="badge ${badgeClass}">${p.estado}</span></td>
-      <td>
+      <td data-label="#">${i + 1}</td>
+      <td data-label="Persona">${escapeHtml(p.persona)}</td>
+      <td data-label="Código">${escapeHtml(p.codigo)}</td>
+      <td data-label="Sección">${escapeHtml(p.seccion)}</td>
+      <td data-label="Artículo">${escapeHtml(p.articuloNombre)} <span style="color:var(--text-muted); font-size:0.78rem;">(${p.articuloSerie})</span></td>
+      <td data-label="Fecha y Hora">${p.fechaHora}</td>
+      <td data-label="Estado"><span class="badge ${badgeClass}">${p.estado}</span></td>
+      <td data-label="Acciones" class="td-actions">
         <button class="btn-action btn-return" onclick="marcarDevuelto(${p.id})" title="Marcar como devuelto" ${p.estado === 'Devuelto' ? 'disabled' : ''}><i class="fas fa-check"></i></button>
         <button class="btn-action btn-delete" onclick="eliminarPrestamo(${p.id})" title="Eliminar"><i class="fas fa-trash"></i></button>
       </td>

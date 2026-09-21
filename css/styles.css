@@ -120,6 +120,7 @@ body {
   align-items: center;
   gap: 12px;
   padding: 22px 20px;
+  padding-top: max(22px, env(safe-area-inset-top, 0px));
   color: var(--white);
   font-size: 1.1rem;
   font-weight: 700;
@@ -199,6 +200,21 @@ body {
   margin-left: 64px;
 }
 
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 45, 91, 0.45);
+  z-index: 99;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition);
+}
+
+.sidebar.open ~ .sidebar-backdrop {
+  opacity: 1;
+  pointer-events: all;
+}
+
 /* ===========================
    TOPBAR
 =========================== */
@@ -209,6 +225,8 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 0 24px;
+  padding-top: env(safe-area-inset-top, 0px);
+  height: calc(var(--topbar-height) + env(safe-area-inset-top, 0px));
   box-shadow: 0 1px 6px rgba(0,0,0,0.07);
   position: sticky;
   top: 0;
@@ -460,7 +478,12 @@ body {
 }
 
 .input-with-btn input {
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.input-with-btn .btn-inline {
+  flex: 0 0 auto;
 }
 
 /* ===========================
@@ -911,5 +934,181 @@ body, .topbar, .stat-card, .modal,
   }
   .total-amount {
     font-size: 1.6rem;
+  }
+
+  /* Menos aire en los márgenes para aprovechar mejor la pantalla */
+  .topbar {
+    padding: 0 16px;
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  .content {
+    padding: 18px 14px;
+    padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  }
+  .page-title {
+    font-size: 1.15rem;
+    margin-bottom: 16px;
+  }
+
+  /* Zonas táctiles más grandes (mínimo recomendado ~44px) */
+  .menu-toggle,
+  .dark-toggle {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .btn-action {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+
+  /* Evita que iOS haga zoom automático al tocar un campo de texto
+     (ocurre cuando el font-size es menor a 16px) */
+  .search-input,
+  .form-group input,
+  .form-group select {
+    font-size: 16px;
+  }
+
+  /* Buscador y botón "Nuevo..." apilados y a todo el ancho */
+  .table-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .table-toolbar .search-input {
+    min-width: 0;
+    width: 100%;
+  }
+  .table-toolbar .btn-primary {
+    width: 100%;
+    justify-content: center;
+    padding: 12px 18px;
+  }
+
+  /* Aviso emergente (toast) centrado y sin desbordarse */
+  .toast {
+    left: 16px;
+    right: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    max-width: none;
+    width: auto;
+    text-align: center;
+  }
+
+  /* El modal respeta el borde inferior en celulares con "isla" */
+  .modal {
+    max-height: 85vh;
+  }
+  .modal-footer {
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    flex-wrap: wrap;
+  }
+  .modal-footer .btn-primary,
+  .modal-footer .btn-secondary,
+  .modal-footer .btn-danger {
+    flex: 1;
+    min-width: 120px;
+    justify-content: center;
+    padding: 12px 14px;
+  }
+
+  /* -----------------------------------------
+     TABLAS → TARJETAS
+     Cada fila se convierte en una tarjeta con
+     pares "etiqueta: valor" en lugar de columnas
+     apretadas que obligan a desplazar horizontalmente.
+  ----------------------------------------- */
+  .table-wrapper {
+    background: transparent;
+    box-shadow: none;
+    overflow-x: visible;
+  }
+
+  .data-table,
+  .data-table tbody,
+  .data-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  .data-table thead {
+    display: none;
+  }
+
+  .data-table tbody tr {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--card-shadow);
+    margin-bottom: 14px;
+    padding: 4px 16px;
+  }
+
+  .data-table tbody tr:hover td {
+    background: transparent;
+  }
+
+  .data-table td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    white-space: normal;
+    text-align: right;
+    font-size: 0.9rem;
+  }
+
+  .data-table td:last-child {
+    border-bottom: none;
+  }
+
+  .data-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    text-align: left;
+    flex-shrink: 0;
+  }
+
+  /* El número de fila no aporta nada en la vista de tarjeta */
+  .data-table td[data-label="#"] {
+    display: none;
+  }
+
+  /* La fila de acciones se ve mejor centrada, sin etiqueta */
+  .data-table td.td-actions {
+    justify-content: center;
+    gap: 14px;
+    padding: 12px 0;
+  }
+  .data-table td.td-actions::before {
+    content: none;
+  }
+  .data-table td.td-actions .btn-action {
+    flex: 1;
+    padding: 10px;
+    font-size: 0.95rem;
+  }
+
+  /* El mensaje de "no hay registros" no debe verse como una tarjeta */
+  .data-table tr.empty-row {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
+  .data-table tr.empty-row td {
+    display: block;
+    text-align: center;
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px dashed var(--border);
+    border-bottom: 1px dashed var(--border);
+  }
+  .data-table tr.empty-row td::before {
+    content: none;
   }
 }

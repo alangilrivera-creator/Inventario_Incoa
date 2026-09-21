@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>Préstamos INCOA</title>
   <link rel="stylesheet" href="css/styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
@@ -10,7 +10,7 @@
 
   <!-- PWA: permite "Agregar a pantalla de inicio" / "Instalar app" en el celular -->
   <link rel="manifest" href="/manifest.json" />
-  <meta name="theme-color" content="#4f46e5" />
+  <meta name="theme-color" content="#0b2d5b" />
   <link rel="icon" href="/icons/icon-192.png" />
   <link rel="apple-touch-icon" href="/icons/icon-192.png" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -37,6 +37,9 @@
       </a>
     </nav>
   </aside>
+
+  <!-- Fondo oscuro para cerrar el menú al tocar fuera (solo celular) -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 
   <!-- MAIN CONTENT -->
   <div class="main-wrapper">
@@ -119,7 +122,7 @@
       <section class="page" id="page-prestamos">
         <h2 class="page-title">Préstamos</h2>
         <div class="table-toolbar">
-          <input type="text" class="search-input" placeholder="Buscar por persona, código, sección o artículo..." id="searchPrestamos"/>
+          <input type="text" class="search-input" placeholder="Buscar por persona, código o artículo..." id="searchPrestamos"/>
           <button class="btn-primary" onclick="abrirModalPrestamo()"><i class="fas fa-plus"></i> Nuevo Préstamo</button>
         </div>
         <div class="table-wrapper">
@@ -151,9 +154,9 @@
           <input type="text" id="articuloNombre" placeholder="Ej. Laptop Dell, Balón de fútbol..."/>
         </div>
         <div class="form-group">
-          <label>Número de serie (máx. 10 dígitos)</label>
+          <label>Número de serie</label>
           <div class="input-with-btn">
-            <input type="text" id="articuloSerie" placeholder="Ej. 12345" maxlength="10" inputmode="numeric"/>
+            <input type="text" id="articuloSerie" placeholder="Ej. 11329-0001" inputmode="text"/>
             <button type="button" class="btn-secondary btn-inline" onclick="generarSerie()"><i class="fas fa-dice"></i></button>
           </div>
         </div>

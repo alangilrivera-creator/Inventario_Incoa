@@ -20,8 +20,8 @@ export default async function handler(req, res) {
       if (!nombre || !nombre.trim()) {
         return res.status(400).json({ error: 'El nombre del artículo es obligatorio.' });
       }
-      if (!/^\d{1,10}$/.test(serie || '')) {
-        return res.status(400).json({ error: 'El número de serie debe ser numérico (máx. 10 dígitos).' });
+      if (!/^\d+(-\d+)*$/.test(serie || '')) {
+        return res.status(400).json({ error: 'El número de serie debe contener solo números y guiones (ej. 11329-0001).' });
       }
 
       const existente = await sql`SELECT id FROM articulos WHERE serie = ${serie}`;
@@ -44,8 +44,8 @@ export default async function handler(req, res) {
       if (!nombre || !nombre.trim()) {
         return res.status(400).json({ error: 'El nombre del artículo es obligatorio.' });
       }
-      if (!/^\d{1,10}$/.test(serie || '')) {
-        return res.status(400).json({ error: 'El número de serie debe ser numérico (máx. 10 dígitos).' });
+      if (!/^\d+(-\d+)*$/.test(serie || '')) {
+        return res.status(400).json({ error: 'El número de serie debe contener solo números y guiones (ej. 11329-0001).' });
       }
 
       const duplicado = await sql`SELECT id FROM articulos WHERE serie = ${serie} AND id != ${id}`;
