@@ -4,7 +4,7 @@
 CREATE TABLE IF NOT EXISTS articulos (
   id SERIAL PRIMARY KEY,
   nombre TEXT NOT NULL,
-  serie TEXT UNIQUE NOT NULL,
+  serie VARCHAR(10) UNIQUE NOT NULL,
   estado TEXT NOT NULL DEFAULT 'Disponible' CHECK (estado IN ('Disponible', 'Prestado'))
 );
 
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS prestamos (
   id SERIAL PRIMARY KEY,
   articulo_id INTEGER,
   articulo_nombre TEXT NOT NULL,
-  articulo_serie TEXT NOT NULL,
+  articulo_serie VARCHAR(10) NOT NULL,
   persona TEXT NOT NULL,
   codigo TEXT NOT NULL,
   seccion TEXT NOT NULL,
